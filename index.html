@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-05-29 18:25。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-05-29 18:40。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -4994,11 +4994,6 @@ window.DASHBOARD_DATA = {
         "inventory": 0
       },
       {
-        "variant": "BG3001 Adjustable Fixed Chrome Bridge Tailpiece For Vintage Electric Guitar Replacement Tool And Cover - Chrome",
-        "product": "BG3001 Adjustable Fixed Chrome Bridge Tailpiece For Vintage Electric Guitar Replacement Tool And Cover",
-        "inventory": 0
-      },
-      {
         "variant": "Guyker CKB022 Guitar Potentiometer Control Knobs with 6mm Dia. - Gold Snake Top / Ancient Silver Body / 3 PCS",
         "product": "Guyker CKB022 Guitar Potentiometer Control Knobs with 6mm Dia.",
         "inventory": 1
@@ -9149,7 +9144,9 @@ window.DASHBOARD_DATA = {
         "aov": 48.8,
         "sessions": 36083,
         "conversion": 0.00676,
-        "customers": 0,
+        "customers": 245,
+        "arpu": 49.65,
+        "orders_per_customer": 1.033,
         "returning": 0,
         "returning_rate": 0,
         "partial": false
@@ -9164,7 +9161,9 @@ window.DASHBOARD_DATA = {
         "aov": 52.06,
         "sessions": 353418,
         "conversion": 0.00623,
-        "customers": 389,
+        "customers": 2155,
+        "arpu": 55.37,
+        "orders_per_customer": 1.09,
         "returning": 100,
         "returning_rate": 0.2571,
         "partial": false
@@ -9180,6 +9179,8 @@ window.DASHBOARD_DATA = {
         "sessions": 311345,
         "conversion": 0.0069,
         "customers": 2105,
+        "arpu": 54.28,
+        "orders_per_customer": 1.089,
         "returning": 550,
         "returning_rate": 0.2613,
         "partial": false
@@ -9195,6 +9196,8 @@ window.DASHBOARD_DATA = {
         "sessions": 315456,
         "conversion": 0.007,
         "customers": 2165,
+        "arpu": 51.18,
+        "orders_per_customer": 1.085,
         "returning": 577,
         "returning_rate": 0.2665,
         "partial": false
@@ -9210,6 +9213,8 @@ window.DASHBOARD_DATA = {
         "sessions": 371686,
         "conversion": 0.00519,
         "customers": 1967,
+        "arpu": 51.63,
+        "orders_per_customer": 1.073,
         "returning": 545,
         "returning_rate": 0.2771,
         "partial": false
@@ -9224,7 +9229,9 @@ window.DASHBOARD_DATA = {
         "aov": 54.86,
         "sessions": 355512,
         "conversion": 0.00577,
-        "customers": 1910,
+        "customers": 2035,
+        "arpu": 57.27,
+        "orders_per_customer": 1.092,
         "returning": 583,
         "returning_rate": 0.3052,
         "partial": true,
@@ -11051,6 +11058,9 @@ window.DASHBOARD_DATA = {
     flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
   h1 { font-size: 22px; font-weight: 700; }
   .sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+  .good { color: var(--green); font-weight: 600; }
+  .bad  { color: var(--red);   font-weight: 600; }
+  .muted { color: var(--muted); }
   .controls { display: flex; gap: 8px; align-items: center; }
   .seg { display: inline-flex; background: #e9edf5; border-radius: 10px; padding: 4px; }
   .seg button { border: 0; background: transparent; padding: 7px 16px; border-radius: 7px;
@@ -11230,6 +11240,38 @@ window.DASHBOARD_DATA = {
   <section>
     <div class="section-title">核心指标</div>
     <div class="kpis" id="kpis"></div>
+  </section>
+
+  <section>
+    <div class="section-title">环比对比 · 最新一日(Shopify-MDT 昨天) vs 昨日 / 上周同日 / 上月同日</div>
+    <table id="dodTable">
+      <thead><tr>
+        <th style="text-align:left">指标</th>
+        <th id="dodHd1">最新</th>
+        <th>vs 昨日</th>
+        <th>vs 上周同日</th>
+        <th>vs 上月同日</th>
+      </tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="note" style="color:var(--muted);font-size:12px;margin-top:4px">绿 = 比基线好;红 = 比基线差(退款率/退款额/广告费用费比 倒过来:数字越小越好)。— 表示基线数据不可用。</div>
+  </section>
+
+  <section>
+    <div class="section-title">客户价值 · 每客户人均消费(ARPU)</div>
+    <div class="kpis" id="customerValueKpis"></div>
+    <div class="grid2" style="margin-top:8px">
+      <div class="chart-card">
+        <h3>月度 ARPU 趋势</h3>
+        <div class="cdesc">每月独立购买客户的人均消费(=净销售÷独立客户)。趋势上升=单客户价值在涨;持平=要靠拉新维持营收。</div>
+        <div class="chart-box"><canvas id="chartArpu"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <h3>客单价 + 折扣率 趋势</h3>
+        <div class="cdesc">客单价(柱)= 净销售÷订单;折扣率(线)= 折扣÷毛销售。折扣率持续走高吃利润,即使销售看上去稳。</div>
+        <div class="chart-box"><canvas id="chartAovDiscount"></canvas></div>
+      </div>
+    </div>
   </section>
 
   <section>
@@ -12252,7 +12294,155 @@ function renderSocial() {
 
 // ---------- 总渲染 ----------
 function renderOps() {
-  renderAlerts(); renderKpis(); renderFunnel(); renderCharts(); renderTable(); renderChannelContribution();
+  renderAlerts(); renderKpis(); renderDoDTable(); renderCustomerValue(); renderFunnel(); renderCharts(); renderAovDiscount(); renderTable(); renderChannelContribution();
+}
+
+// ---------- 环比对比表(最新一日 vs 昨/上周同/上月同)----------
+function renderDoDTable() {
+  const tbody = document.querySelector("#dodTable tbody");
+  if (!tbody) return;
+  // 用全部站点 / 全部日期的 ops 行(不受时间范围 selector 影响)
+  const rowsAll = DATA.rows.filter(r => r.store);
+  const byDate = {};
+  rowsAll.forEach(r => {
+    const k = r.date;
+    if (!byDate[k]) byDate[k] = { orders: 0, net_sales: 0, gross_sales: 0, discounts: 0, refund_amount: 0, sessions: 0, meta_spend: 0, gads_spend: 0 };
+    const b = byDate[k];
+    b.orders += +r.orders || 0;
+    b.net_sales += +r.net_sales || 0;
+    b.gross_sales += +r.gross_sales || 0;
+    b.discounts += +r.discounts || 0;
+    b.refund_amount += +r.refund_amount || 0;
+    b.sessions += +r.shopify_sessions || 0;
+    b.meta_spend += +r.meta_spend || 0;
+    b.gads_spend += +r.gads_spend || 0;
+  });
+  const dates = Object.keys(byDate).sort();
+  if (!dates.length) { tbody.innerHTML = ""; return; }
+  const latest = dates[dates.length - 1];
+  const offsetDate = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0,10); };
+  const dY = offsetDate(latest, -1), dW = offsetDate(latest, -7), dM = offsetDate(latest, -30);
+  document.getElementById("dodHd1").textContent = `最新 ${latest}`;
+
+  const cur = byDate[latest];
+  // 各基线数据(可能不存在)
+  const pick = (k, base) => byDate[base] ? byDate[base][k] : null;
+  // 指标 + 是否"越大越好"
+  const metrics = [
+    { k: "net_sales", lbl: "净销售额", fmt: fmtMoney, bigger: true },
+    { k: "orders", lbl: "订单数", fmt: fmtInt, bigger: true },
+    { k: "aov", lbl: "客单价", fmt: v => "$" + v.toFixed(2), bigger: true, derive: b => b.orders ? b.net_sales / b.orders : 0 },
+    { k: "discount_rate", lbl: "折扣率", fmt: fmtPct, bigger: false, derive: b => b.gross_sales ? b.discounts / b.gross_sales : 0 },
+    { k: "refund_amount", lbl: "退款金额", fmt: fmtMoney, bigger: false },
+    { k: "sessions", lbl: "Shopify 会话", fmt: fmtInt, bigger: true },
+    { k: "ad_spend", lbl: "广告花费", fmt: fmtMoney, bigger: false, derive: b => (b.meta_spend || 0) + (b.gads_spend || 0) },
+  ];
+  const getV = (b, m) => b == null ? null : (m.derive ? m.derive(b) : b[m.k]);
+  const cmp = (curV, baseV, bigger) => {
+    if (curV == null || baseV == null || !isFinite(baseV)) return "—";
+    if (baseV === 0) return curV === 0 ? "0%" : "—";
+    const delta = (curV - baseV) / baseV;
+    const isGood = bigger ? delta >= 0 : delta <= 0;
+    const sign = delta >= 0 ? "↑" : "↓";
+    const cls = Math.abs(delta) < 0.005 ? "muted" : (isGood ? "good" : "bad");
+    return `<span class="${cls}">${sign}${(Math.abs(delta) * 100).toFixed(1)}%</span>`;
+  };
+  tbody.innerHTML = metrics.map(m => {
+    const curV = getV(cur, m);
+    const r = b => cmp(curV, getV(b, m), m.bigger);
+    return `<tr>
+      <td style="text-align:left">${m.lbl}</td>
+      <td>${curV != null ? m.fmt(curV) : "—"}</td>
+      <td>${r(byDate[dY])}</td>
+      <td>${r(byDate[dW])}</td>
+      <td>${r(byDate[dM])}</td>
+    </tr>`;
+  }).join("");
+}
+
+// ---------- 客户价值(ARPU)----------
+function renderCustomerValue() {
+  const root = document.getElementById("customerValueKpis");
+  if (!root) return;
+  const M = DATA.monthly || {};
+  const months = (M.months || []).slice();
+
+  // 当前选择的时间范围 - 算窗口 ARPU(从 ops_real 的 customers 列)
+  const opsReal = (DATA.ops_real_guyker || DATA.rows.filter(r => r.store === "guyker")).filter(r => inWindow(r.date));
+  const winCust = opsReal.reduce((a, r) => a + (+r.customers || 0), 0);
+  const winNet = opsReal.reduce((a, r) => a + (+r.net_sales || 0), 0);
+  const winOrders = opsReal.reduce((a, r) => a + (+r.orders || 0), 0);
+  // 注:这里 winCust 是"按天累加",同一客户跨多天会被多次计;窗口 ARPU 仅作粗略参考。
+  // 真"独立客户"在 monthly 维度才精确(直接从 ShopifyQL customers 指标拿)。
+
+  // 月度对比:最近完整月 vs 上一完整月
+  const fullMonths = months.filter(m => !m.partial);
+  const latestFull = fullMonths[fullMonths.length - 1];
+  const prevFull = fullMonths[fullMonths.length - 2];
+  const arpuLatest = latestFull?.arpu, arpuPrev = prevFull?.arpu;
+  const arpuDelta = (arpuLatest != null && arpuPrev != null && arpuPrev > 0)
+    ? ((arpuLatest - arpuPrev) / arpuPrev * 100).toFixed(1) : null;
+
+  // 当月(可能 partial)
+  const curMonth = months[months.length - 1] || {};
+  const cards = [
+    { label: `${RANGE.label} 客户(粗略)`, value: winCust ? fmtInt(winCust) : "—", hint: "按天累加,跨日同人会重复" },
+    { label: `${RANGE.label} 营收 ÷ 客户`, value: winCust ? "$" + (winNet / winCust).toFixed(2) : "—", hint: "粗略 ARPU 估算" },
+    { label: `${curMonth.month || "本月"} 独立客户`, value: curMonth.customers ? fmtInt(curMonth.customers) : "—", hint: curMonth.partial ? "未走完月" : "完整月" },
+    { label: `${curMonth.month || "本月"} ARPU`, value: curMonth.arpu ? "$" + curMonth.arpu.toFixed(2) : "—", hint: curMonth.orders_per_customer ? `订单/客户 ${curMonth.orders_per_customer.toFixed(2)}` : "" },
+    { label: `${latestFull?.month || "上月"} ARPU`, value: arpuLatest ? "$" + arpuLatest.toFixed(2) : "—", hint: arpuDelta != null ? `vs ${prevFull?.month || ""} ${arpuDelta >= 0 ? "↑" : "↓"}${Math.abs(arpuDelta)}%` : "" },
+  ];
+  root.innerHTML = cards.map(c =>
+    `<div class="kpi"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="hint">${c.hint || ""}</div></div>`).join("");
+
+  // 月度 ARPU 图
+  makeChart("chartArpu", {
+    type: "line",
+    data: {
+      labels: months.map(m => m.month + (m.partial ? "*" : "")),
+      datasets: [{
+        label: "月度 ARPU($)",
+        data: months.map(m => m.arpu || null),
+        borderColor: C.brand, backgroundColor: "rgba(37,99,235,.1)",
+        tension: .25, fill: true, spanGaps: true,
+      }],
+    },
+    options: Object.assign({}, baseOpts, { plugins: { legend: { display: false } } }),
+  });
+}
+
+// ---------- 客单价 + 折扣率 趋势(双 y 轴)----------
+function renderAovDiscount() {
+  const rowsWin = inRange();
+  if (!rowsWin.length) return;
+  const byDate = {};
+  rowsWin.forEach(r => {
+    const k = r.date;
+    if (!byDate[k]) byDate[k] = { orders: 0, net_sales: 0, gross_sales: 0, discounts: 0 };
+    byDate[k].orders += +r.orders || 0;
+    byDate[k].net_sales += +r.net_sales || 0;
+    byDate[k].gross_sales += +r.gross_sales || 0;
+    byDate[k].discounts += +r.discounts || 0;
+  });
+  const dates = Object.keys(byDate).sort();
+  const aov = dates.map(d => byDate[d].orders ? byDate[d].net_sales / byDate[d].orders : 0);
+  const discRate = dates.map(d => byDate[d].gross_sales ? byDate[d].discounts / byDate[d].gross_sales : 0);
+  makeChart("chartAovDiscount", {
+    type: "bar",
+    data: {
+      labels: dates.map(d => d.slice(5)),
+      datasets: [
+        { type: "bar", label: "客单价($)", data: aov, backgroundColor: "rgba(37,99,235,.7)", yAxisID: "y" },
+        { type: "line", label: "折扣率", data: discRate, borderColor: C.amber, tension: .25, yAxisID: "y2", pointRadius: 1 },
+      ],
+    },
+    options: Object.assign({}, baseOpts, {
+      scales: {
+        y: { beginAtZero: true, title: { display: true, text: "客单价 $" } },
+        y2: { position: "right", beginAtZero: true, grid: { display: false }, ticks: { callback: v => (v * 100).toFixed(0) + "%" }, title: { display: true, text: "折扣率" } },
+      },
+    }),
+  });
 }
 
 // ---------- 渲染:渠道贡献(总额认 Shopify · 结构看 GA4)----------
