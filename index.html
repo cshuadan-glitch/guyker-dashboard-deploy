@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-05-29 18:40。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-05-29 19:16。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -9130,7 +9130,7 @@ window.DASHBOARD_DATA = {
     ]
   },
   "monthly": {
-    "_note": "Guyker 月度经营汇总 + 流量来源,真实数据,经 Shopify Analytics(ShopifyQL)拉取。口径:net_sales/orders/refund 以 Shopify 为准。时区 MDT。环比按相邻完整月;同比缺(仅5个月历史)。客户/复购列:ShopifyQL 公开列不支持,沿用上次 MCP 快照值;流量来源 orders/net_sales 按 checkout 占比近似分配,非精确。",
+    "_note": "Guyker 月度经营汇总 + 流量来源 + 优惠码,真实数据,经 Shopify Analytics(ShopifyQL)拉取。口径:net_sales/orders/refund 以 Shopify 为准。时区 MDT。环比按相邻完整月;同比缺(仅5个月历史)。客户(月)= sales 表 customers 指标;returning(复购客户数)拿不到,沿用旧值。流量来源 orders/net_sales 按 checkout 占比近似分配,非精确。",
     "as_of": "2026-05-28",
     "currency": "USD",
     "months": [
@@ -9236,6 +9236,128 @@ window.DASHBOARD_DATA = {
         "returning_rate": 0.3052,
         "partial": true,
         "partial_note": "截至 2026-05-28,未走完整月"
+      }
+    ],
+    "discount_codes_30d": [
+      {
+        "code": "(无码)",
+        "orders": 1822,
+        "net_sales": 88417.88,
+        "discount_amount": 8301.51
+      },
+      {
+        "code": "GYSEO15",
+        "orders": 182,
+        "net_sales": 8748.96,
+        "discount_amount": 1542.5
+      },
+      {
+        "code": "FBVIP15",
+        "orders": 60,
+        "net_sales": 4807.89,
+        "discount_amount": 851.73
+      },
+      {
+        "code": "ANN26",
+        "orders": 33,
+        "net_sales": 2473.13,
+        "discount_amount": 439.86
+      },
+      {
+        "code": "GYSAS15",
+        "orders": 29,
+        "net_sales": 2315.83,
+        "discount_amount": 409.62
+      },
+      {
+        "code": "STOKOZOV",
+        "orders": 21,
+        "net_sales": 781.57,
+        "discount_amount": 86.65
+      },
+      {
+        "code": "Welcome10",
+        "orders": 20,
+        "net_sales": 1346.62,
+        "discount_amount": 150.48
+      },
+      {
+        "code": "JOHANJONASSON",
+        "orders": 15,
+        "net_sales": 1134.79,
+        "discount_amount": 132.44
+      },
+      {
+        "code": "NEOGEO15",
+        "orders": 14,
+        "net_sales": 1626.12,
+        "discount_amount": 286.86
+      },
+      {
+        "code": "POOJA",
+        "orders": 13,
+        "net_sales": 905.89,
+        "discount_amount": 116.65
+      },
+      {
+        "code": "CNC18",
+        "orders": 8,
+        "net_sales": 664.2,
+        "discount_amount": 145.69
+      },
+      {
+        "code": "flashdealprize",
+        "orders": 8,
+        "net_sales": 669.45,
+        "discount_amount": 74.32
+      },
+      {
+        "code": "MYLIFE",
+        "orders": 7,
+        "net_sales": 403.43,
+        "discount_amount": 50.77
+      },
+      {
+        "code": "REDADZIRI",
+        "orders": 6,
+        "net_sales": 171.99,
+        "discount_amount": 19.06
+      },
+      {
+        "code": "QUOCTRUONG",
+        "orders": 6,
+        "net_sales": 203.31,
+        "discount_amount": 22.54
+      },
+      {
+        "code": "abandon12",
+        "orders": 6,
+        "net_sales": 436.31,
+        "discount_amount": 72.0
+      },
+      {
+        "code": "Mortalis",
+        "orders": 5,
+        "net_sales": 211.53,
+        "discount_amount": 23.46
+      },
+      {
+        "code": "QUANGNGUYEN",
+        "orders": 5,
+        "net_sales": 371.15,
+        "discount_amount": 51.8
+      },
+      {
+        "code": "FB15",
+        "orders": 3,
+        "net_sales": 167.84,
+        "discount_amount": 29.6
+      },
+      {
+        "code": "ASHISHKUMAR",
+        "orders": 3,
+        "net_sales": 58.05,
+        "discount_amount": 9.83
       }
     ],
     "traffic": {
@@ -11275,6 +11397,35 @@ window.DASHBOARD_DATA = {
   </section>
 
   <section>
+    <div class="section-title">渠道 ROAS · 谁在挣钱、谁在亏钱(近30天)</div>
+    <div class="kpis" id="channelRoasKpis"></div>
+    <div class="note" style="color:var(--muted);font-size:12px;margin-top:4px">
+      ROAS = 渠道估算营收 ÷ 渠道实际花费;估算营收 = Shopify 30 天总营收 × GA4 修正归因后该渠道营收占比。<br>
+      Meta = Paid Social + GA4 修正后的 Organic Social 部分(因为 Meta 广告之前错归 Organic Social,已修正);Google = Paid Search + Display + Cross-network 等。
+    </div>
+  </section>
+
+  <section>
+    <div class="section-title">弃购 & 优惠码 · 增收机会信号</div>
+    <div class="kpis" id="abandonDiscountKpis"></div>
+    <div class="grid2" style="margin-top:8px">
+      <div class="chart-card">
+        <h3>近 30 天优惠码 Top</h3>
+        <div class="cdesc">每个码的订单数 / 营收 / 平均折扣深度。无码订单占 ~80% 说明大部分客户原价下单 —— 加码也未必是增量。</div>
+        <table id="discountCodeTable" style="margin-top:6px">
+          <thead><tr><th style="text-align:left">码</th><th>订单</th><th>营收</th><th>折扣总额</th><th>平均折扣</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="chart-card">
+        <h3>弃购数趋势(reached_checkout − orders)</h3>
+        <div class="cdesc">发起结账但没下单的客户数。下方降说明结账阻力变小,上升要查支付/运费/页面问题。</div>
+        <div class="chart-box"><canvas id="chartAbandon"></canvas></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <div class="section-title">ROI 链路 · 从花钱到净利</div>
     <div class="funnel" id="funnel"></div>
   </section>
@@ -11547,13 +11698,14 @@ window.DASHBOARD_DATA = {
       <div class="note" id="issuesIntro"></div>
     </section>
     <section>
+      <div class="section-title">逐条解读 · 该做什么</div>
+      <div id="issuesNotes"></div>
+    </section>
+    <section>
+      <div class="section-title">数据明细</div>
       <table id="issuesTable"><thead><tr>
         <th>问题主题</th><th class="ch">差评</th><th class="ch">VOC</th><th class="ch">客服</th><th class="ch">出现渠道</th><th>严重度</th>
       </tr></thead><tbody></tbody></table>
-    </section>
-    <section>
-      <div class="section-title">逐条解读</div>
-      <div id="issuesNotes"></div>
     </section>
     <section><div class="note" id="issuesFooter"></div></section>
   </div><!-- /page-issues -->
@@ -11708,6 +11860,24 @@ const fmtInt = v => Math.round(v).toLocaleString("en-US");
 const fmtPct = v => (v * 100).toFixed(2) + "%";
 const fmtRoas = v => v.toFixed(2) + "x";
 const sum = (rows, key) => rows.reduce((a, r) => a + (r[key] || 0), 0);
+
+// 迷你折线 sparkline(纯 SVG,无依赖)
+function sparkline(values, opts) {
+  opts = opts || {};
+  const w = opts.width || 80, h = opts.height || 18, color = opts.color || "#2f6df6";
+  const cleaned = (values || []).filter(v => v != null && isFinite(v));
+  if (cleaned.length < 2) return '<span style="color:var(--muted);font-size:11px">—</span>';
+  const max = Math.max(...cleaned), min = Math.min(...cleaned);
+  const range = max - min || 1;
+  const xs = (i) => i * w / (cleaned.length - 1);
+  const ys = (v) => h - 2 - ((v - min) / range) * (h - 4);
+  const points = cleaned.map((v, i) => `${xs(i).toFixed(1)},${ys(v).toFixed(1)}`).join(" ");
+  // 尾部箭头标识方向
+  const trend = cleaned[cleaned.length - 1] >= cleaned[0] ? "↑" : "↓";
+  const trendColor = (opts.invert ? trend === "↓" : trend === "↑") ? "var(--green)" : "var(--red)";
+  return `<svg width="${w}" height="${h}" style="vertical-align:middle"><polyline points="${points}" fill="none" stroke="${color}" stroke-width="1.5" /></svg>` +
+    `<span style="font-size:10px;color:${trendColor};margin-left:3px;font-weight:600">${trend}</span>`;
+}
 
 // 按当前时间范围过滤(取最近 N 天)
 function inRange() {
@@ -12294,7 +12464,139 @@ function renderSocial() {
 
 // ---------- 总渲染 ----------
 function renderOps() {
-  renderAlerts(); renderKpis(); renderDoDTable(); renderCustomerValue(); renderFunnel(); renderCharts(); renderAovDiscount(); renderTable(); renderChannelContribution();
+  renderAlerts(); renderKpis(); renderDoDTable(); renderCustomerValue();
+  renderChannelROAS(); renderAbandonDiscount();
+  renderFunnel(); renderCharts(); renderAovDiscount(); renderTable(); renderChannelContribution();
+}
+
+// ---------- 渲染:渠道 ROAS(Meta vs Google)----------
+function renderChannelROAS() {
+  const root = document.getElementById("channelRoasKpis");
+  if (!root) return;
+  const G = DATA.ga4 || {};
+  const ch = (G.channels_corrected || G.channels || []).slice();
+  const T = (DATA.monthly || {}).traffic || {};
+  const shopTotal = (T.sources || []).reduce((a, s) => a + (s.net_sales || 0), 0);  // Shopify 30d 总营收
+
+  // 30 天广告花费(从 daily_metrics 算)
+  const rowsWin30 = DATA.rows.filter(r => r.store === "guyker");
+  const dates = [...new Set(rowsWin30.map(r => r.date))].sort();
+  const last30 = dates.slice(-30);
+  const last30set = new Set(last30);
+  const ad30 = rowsWin30.filter(r => last30set.has(r.date));
+  const metaSpend = ad30.reduce((a, r) => a + (+r.meta_spend || 0), 0);
+  const gadsSpend = ad30.reduce((a, r) => a + (+r.gads_spend || 0), 0);
+  const totalSpend = metaSpend + gadsSpend;
+  const netSales30 = ad30.reduce((a, r) => a + (+r.net_sales || 0), 0);
+  const refund30 = ad30.reduce((a, r) => a + (+r.refund_amount || 0), 0);
+
+  if (!ch.length || !shopTotal || !gaOn()) {
+    root.innerHTML = `<div class="kpi na"><div class="label">渠道 ROAS</div><div class="value">待 GA4</div><div class="hint">需 GA4 接入后才能拆分 Meta/Google 营收</div></div>`;
+    return;
+  }
+
+  // GA4 营收按渠道汇总
+  const gaRevTotal = ch.reduce((a, c) => a + (c.ga_revenue || 0), 0) || 1;
+  const isMeta = n => /Paid Social|Social Ads/i.test(n);
+  const isGoogle = n => /Paid Search|Display|Cross-?network|Paid Video|Paid Shopping|Paid Other/i.test(n);
+  const metaGaRev = ch.filter(c => isMeta(c.channel)).reduce((a, c) => a + (c.ga_revenue || 0), 0);
+  const gadsGaRev = ch.filter(c => isGoogle(c.channel)).reduce((a, c) => a + (c.ga_revenue || 0), 0);
+
+  // 估算各平台 Shopify 实际营收 = Shopify总额 × GA4营收占比
+  const metaEstRev = shopTotal * metaGaRev / gaRevTotal;
+  const gadsEstRev = shopTotal * gadsGaRev / gaRevTotal;
+  const metaRoas = metaSpend > 0 ? metaEstRev / metaSpend : null;
+  const gadsRoas = gadsSpend > 0 ? gadsEstRev / gadsSpend : null;
+  const blendedRoas = totalSpend > 0 ? shopTotal / totalSpend : null;
+
+  // 前毛利 = 净销售 - 广告 - 退款(未含 COGS)
+  const preGross = netSales30 - totalSpend - refund30;
+  const preGrossPct = netSales30 > 0 ? preGross / netSales30 : 0;
+
+  // ROAS 颜色阈值:>3 绿 / 2-3 黄 / <2 红
+  const roasColor = v => v == null ? "" : v >= 3 ? "good" : v >= 2 ? "" : "bad";
+  const fmtR = v => v == null ? "—" : v.toFixed(2) + "x";
+
+  const cards = [
+    { label: "Meta ROAS(估算)",  value: `<span class="${roasColor(metaRoas)}">${fmtR(metaRoas)}</span>`, hint: `花费 ${fmtMoney(metaSpend)} · 估营收 ${fmtMoney(metaEstRev)}` },
+    { label: "Google ROAS(估算)", value: `<span class="${roasColor(gadsRoas)}">${fmtR(gadsRoas)}</span>`, hint: `花费 ${fmtMoney(gadsSpend)} · 估营收 ${fmtMoney(gadsEstRev)}` },
+    { label: "综合 ROAS",         value: `<span class="${roasColor(blendedRoas)}">${fmtR(blendedRoas)}</span>`, hint: `Shopify 总营收 ÷ 总广告花费` },
+    { label: "前毛利(30天)",     value: `<span class="${preGross > 0 ? 'good' : 'bad'}">${fmtMoney(preGross)}</span>`, hint: `${(preGrossPct * 100).toFixed(1)}% · 净销售 − 广告 − 退款(未扣 COGS)` },
+  ];
+  root.innerHTML = cards.map(c =>
+    `<div class="kpi"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="hint">${c.hint}</div></div>`).join("");
+}
+
+// ---------- 渲染:弃购 + 优惠码 ----------
+function renderAbandonDiscount() {
+  const root = document.getElementById("abandonDiscountKpis");
+  if (!root) return;
+  const rowsWin = inRange();
+  const sessions = rowsWin.reduce((a, r) => a + (+r.shopify_sessions || 0), 0);
+  const atc = rowsWin.reduce((a, r) => a + (+r.cart_adds || 0), 0);
+  const checkouts = rowsWin.reduce((a, r) => a + (+r.checkouts || 0), 0);
+  const orders = rowsWin.reduce((a, r) => a + (+r.orders || 0), 0);
+  const grossSales = rowsWin.reduce((a, r) => a + (+r.gross_sales || 0), 0);
+  const discounts = rowsWin.reduce((a, r) => a + (+r.discounts || 0), 0);
+
+  const abandon = Math.max(0, checkouts - orders);
+  const abandonRate = checkouts ? abandon / checkouts : 0;
+  const cartAbandon = atc ? (atc - checkouts) / atc : 0;   // 加购后未发起结账率
+  const discountRate = grossSales ? discounts / grossSales : 0;
+
+  // 优惠码统计
+  const codes = (DATA.monthly || {}).discount_codes_30d || [];
+  const noCode = codes.find(c => c.code === "(无码)") || { orders: 0 };
+  const codeTotal = codes.reduce((a, c) => a + (c.orders || 0), 0);
+  const codeOrders = codeTotal - (noCode.orders || 0);
+  const codeUsageRate = codeTotal ? codeOrders / codeTotal : 0;
+  // 用码订单的平均折扣深度
+  const codedNet = codes.filter(c => c.code !== "(无码)").reduce((a, c) => a + (c.net_sales || 0), 0);
+  const codedDisc = codes.filter(c => c.code !== "(无码)").reduce((a, c) => a + (c.discount_amount || 0), 0);
+  const codeAvgDepth = codedNet ? codedDisc / (codedNet + codedDisc) : 0;
+
+  const cards = [
+    { label: `弃购数(${RANGE.label})`, value: fmtInt(abandon), hint: `结账 ${fmtInt(checkouts)} − 下单 ${fmtInt(orders)}` },
+    { label: `弃购率(${RANGE.label})`, value: fmtPct(abandonRate), hint: abandonRate > 0.7 ? "<span class='bad'>偏高,查支付/运费</span>" : "结账→下单流失率" },
+    { label: `加购→结账流失`, value: fmtPct(cartAbandon), hint: `加购 ${fmtInt(atc)} → 结账 ${fmtInt(checkouts)}` },
+    { label: `优惠码使用率(30天)`, value: fmtPct(codeUsageRate), hint: `${fmtInt(codeOrders)}/${fmtInt(codeTotal)} 单 · 80% 客户原价下单` },
+    { label: `平均折扣深度(全部)`, value: fmtPct(discountRate), hint: "总折扣 ÷ 毛销售(含自动促销)" },
+    { label: `用码订单折扣深度`, value: fmtPct(codeAvgDepth), hint: "仅算用码订单(无码客户不算)" },
+  ];
+  root.innerHTML = cards.map(c =>
+    `<div class="kpi"><div class="label">${c.label}</div><div class="value">${c.value}</div><div class="hint">${c.hint}</div></div>`).join("");
+
+  // 优惠码 Top 表
+  const tbody = document.querySelector("#discountCodeTable tbody");
+  if (tbody) {
+    tbody.innerHTML = codes.slice(0, 8).map(c => {
+      const avg = c.orders ? c.discount_amount / c.orders : 0;
+      return `<tr><td style="text-align:left"><code>${c.code}</code></td>
+        <td>${fmtInt(c.orders)}</td>
+        <td>${fmtMoney(c.net_sales)}</td>
+        <td>${fmtMoney(c.discount_amount)}</td>
+        <td>$${avg.toFixed(2)}</td></tr>`;
+    }).join("");
+  }
+
+  // 弃购数趋势图
+  const byDate = {};
+  rowsWin.forEach(r => {
+    const k = r.date;
+    if (!byDate[k]) byDate[k] = { co: 0, ord: 0 };
+    byDate[k].co += +r.checkouts || 0;
+    byDate[k].ord += +r.orders || 0;
+  });
+  const dates = Object.keys(byDate).sort();
+  const abandonSeries = dates.map(d => Math.max(0, byDate[d].co - byDate[d].ord));
+  makeChart("chartAbandon", {
+    type: "line",
+    data: {
+      labels: dates.map(d => d.slice(5)),
+      datasets: [{ label: "弃购数(发起结账但未下单)", data: abandonSeries, borderColor: C.amber, backgroundColor: "rgba(245,158,11,.10)", fill: true, tension: .25 }],
+    },
+    options: Object.assign({}, baseOpts, { plugins: { legend: { display: false } } }),
+  });
 }
 
 // ---------- 环比对比表(最新一日 vs 昨/上周同/上月同)----------
@@ -12562,7 +12864,20 @@ function renderMonthly() {
     { label: "复购率", data: months.map(m => +(m.returning_rate * 100).toFixed(1)), borderColor: C.purple, backgroundColor: "rgba(124,58,237,.1)", fill: true, tension: .3 },
   ]}, options: Object.assign({}, baseOpts, { plugins: { legend: { display: false } }, scales: { x: baseOpts.scales.x, y: { ticks: { callback: v => v + "%" } } } }) });
 
-  document.querySelector("#monthlyTable tbody").innerHTML = months.map((m, i) => {
+  // 趋势行(sparkline)— 关键指标:销售/订单/AOV/退款额/退款率/会话/转化/复购
+  const trendRow = `<tr style="background:#f9fafc;font-size:12px">
+    <td style="text-align:left;color:var(--muted)">趋势</td>
+    <td>${sparkline(months.map(m => m.net_sales))}</td>
+    <td style="color:var(--muted)">—</td>
+    <td>${sparkline(months.map(m => m.orders))}</td>
+    <td>${sparkline(months.map(m => m.aov), { color: "#d97706" })}</td>
+    <td>${sparkline(months.map(m => m.refund), { color: "#dc2626", invert: true })}</td>
+    <td>${sparkline(months.map(m => m.net_sales ? m.refund / m.net_sales : 0), { color: "#dc2626", invert: true })}</td>
+    <td>${sparkline(months.map(m => m.sessions), { color: "#6b7689" })}</td>
+    <td>${sparkline(months.map(m => m.conversion), { color: "#16a34a" })}</td>
+    <td>${sparkline(months.map(m => m.returning_rate), { color: "#7c3aed" })}</td>
+  </tr>`;
+  document.querySelector("#monthlyTable tbody").innerHTML = trendRow + months.map((m, i) => {
     const pre = i > 0 ? months[i - 1] : null;
     // 任一月未走完(partial)则不算环比 —— 拿不完整月对比会得出误导性数字
     const d = (pre && !pre.partial && !m.partial) ? mom(m.net_sales, pre.net_sales) : null;
@@ -12789,8 +13104,33 @@ function renderOverview() {
   document.getElementById("ovAlerts").innerHTML = al.map(([lvl, tag, msg]) =>
     `<div class="alert ${lvl}"><span class="dot"></span>${tag ? `<span class="tag">${tag}</span>` : ""}<span>${msg}</span></div>`).join("");
 
-  // ===== 六大维度速览卡 =====
-  const dm = (v, l, cls) => `<div class="dm"><div class="dm-v ${cls || ""}">${v}</div><div class="dm-l">${l}</div></div>`;
+  // ===== 与"前一窗口"对比(同长度往前推),给六大维度卡加 ↑% =====
+  const winDays = RANGE.days || 30;
+  const offsetDate = (iso, n) => { const d = new Date(iso + "T00:00:00Z"); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+  const prevStart = offsetDate(RANGE.start, -winDays);
+  const prevEnd = offsetDate(RANGE.start, -1);
+  const prevRows = DATA.rows.filter(r => r.date >= prevStart && r.date <= prevEnd);
+  const prevCsRows = filterRows(DATA.cs_rows || []).filter(r => r.date >= prevStart && r.date <= prevEnd);
+  const pNetSales = sum(prevRows, "net_sales"), pOrders = sum(prevRows, "orders");
+  const pRefund = sum(prevRows, "refund_amount"), pRefundRate = pNetSales ? pRefund / pNetSales : 0;
+  const pEstNet = sum(prevRows, "estimated_net");
+  const pAdSpend = sum(prevRows, "total_ad_spend"), pCostRatio = pNetSales ? pAdSpend / pNetSales : 0;
+  const pRecv = sum(prevCsRows, "emails_received"), pRepl = sum(prevCsRows, "emails_replied");
+  const pReplyRate = pRecv ? pRepl / pRecv : 0;
+  const delta = (cur, prev) => (prev != null && prev !== 0 && isFinite(prev)) ? (cur - prev) / prev : null;
+
+  // 含 delta 的 dm:第 4 参 delta = 浮点(>0 涨,<0 跌);第 5 参 invert=true 表示"涨为坏"(退款率/广告费比 等)
+  const dm = (v, l, cls, delta, invert) => {
+    let dh = '';
+    if (delta != null && isFinite(delta) && Math.abs(delta) >= 0.001) {
+      const up = delta >= 0;
+      const arr = up ? '↑' : '↓';
+      const isGood = invert ? !up : up;
+      const cl = isGood ? 'good' : 'bad';
+      dh = ` <span class="${cl}" style="font-size:11px;font-weight:600;margin-left:4px">${arr}${(Math.abs(delta) * 100).toFixed(1)}%</span>`;
+    }
+    return `<div class="dm"><div class="dm-v ${cls || ""}">${v}${dh}</div><div class="dm-l">${l}</div></div>`;
+  };
   const dcard = (title, tab, badge, live, dms) =>
     `<div class="dcard" onclick="jumpTab('${tab}')"><div class="dcard-h"><span class="dt">${title}</span>` +
     `${badge ? `<span class="dbadge${live ? " live" : ""}">${badge}</span>` : ""}<span class="dcard-go">详情 ›</span></div>` +
@@ -12798,19 +13138,19 @@ function renderOverview() {
 
   const cards = [];
   cards.push(dcard("网站销售", "ops", "真实", true, [
-    dm(fmtMoney(netSales), "净销售额"),
-    dm(ads ? fmtMoney(estNet) : "待补齐", "营销后毛额", ads ? "" : "na"),
-    dm(fmtPct(refundRate), "退款率", refundRate > th.refund_rate_warn ? "red" : ""),
+    dm(fmtMoney(netSales), "净销售额", "", delta(netSales, pNetSales)),
+    dm(ads ? fmtMoney(estNet) : "待补齐", "营销后毛额", ads ? "" : "na", ads ? delta(estNet, pEstNet) : null),
+    dm(fmtPct(refundRate), "退款率", refundRate > th.refund_rate_warn ? "red" : "", delta(refundRate, pRefundRate), true),
   ]));
   cards.push(dcard("广告投放", "ops", ads ? "真实" : (meta ? "缺Google" : "未接入"), ads, [
-    dm(ads ? fmtPct(costRatio) : "待补齐", "广告费用费比", ads ? "" : "na"),
-    dm(ads ? fmtMoney(adSpend) : (meta ? fmtMoney(metaSpend) : "—"), ads ? "总广告花费" : "Meta 花费", ads ? "" : (meta ? "amber" : "na")),
-    dm(ads && orders ? fmtMoney2(adSpend / orders) : "—", "获客成本 CPA"),
+    dm(ads ? fmtPct(costRatio) : "待补齐", "广告费用费比", ads ? "" : "na", ads ? delta(costRatio, pCostRatio) : null, true),
+    dm(ads ? fmtMoney(adSpend) : (meta ? fmtMoney(metaSpend) : "—"), ads ? "总广告花费" : "Meta 花费", ads ? "" : (meta ? "amber" : "na"), ads ? delta(adSpend, pAdSpend) : null),
+    dm(ads && orders ? fmtMoney2(adSpend / orders) : "—", "获客成本 CPA", "", ads && orders && pOrders ? delta(adSpend / orders, pAdSpend / pOrders) : null, true),
   ]));
   cards.push(dcard("客服邮件", "cs", "真实", true, [
     dm(fmtInt(backlog), "未回复积压", backlog > 50 ? "red" : ""),
     dm(frt != null ? frt.toFixed(1) + "h" : "—", "平均首响", (frt != null && frt > frtTarget) ? "red" : ""),
-    dm(fmtPct(replyRate), "回复率", replyRate && replyRate < 0.8 ? "amber" : ""),
+    dm(fmtPct(replyRate), "回复率", replyRate && replyRate < 0.8 ? "amber" : "", delta(replyRate, pReplyRate)),
   ]));
   const SM = DATA.social_meta || {}, smIg = SM.instagram || {}, smFb = SM.facebook || {};
   const socSrc = (((DATA.monthly || {}).traffic || {}).sources || []).find(s => s.source === "social") || {};
