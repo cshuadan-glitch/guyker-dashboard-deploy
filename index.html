@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-06-03 15:17。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-06-03 15:28。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6199,14 +6199,14 @@ window.DASHBOARD_DATA = {
   },
   "kol": {
     "_note": "红人外联汇总(来源 influencer-outreach;冷邮件无打开追踪,故无打开率)。生产应定时重跑。",
-    "as_of": "2026-06-02",
+    "as_of": "2026-06-03",
     "totals": {
-      "sent": 11031,
-      "contacted": 5185,
+      "sent": 11111,
+      "contacted": 5209,
       "replied": 664,
-      "reply_rate": 0.1281,
+      "reply_rate": 0.1275,
       "cooperated": 186,
-      "coop_rate": 0.0359,
+      "coop_rate": 0.0357,
       "reply_msgs_raw": 3585
     },
     "daily": [
@@ -7532,14 +7532,19 @@ window.DASHBOARD_DATA = {
       },
       {
         "date": "2026-06-02",
-        "sent": 38,
+        "sent": 96,
+        "replied": 0
+      },
+      {
+        "date": "2026-06-03",
+        "sent": 22,
         "replied": 0
       }
     ],
     "outcomes": [
       {
         "name": "发送未回复",
-        "count": 4220
+        "count": 4244
       },
       {
         "name": "死邮箱",
@@ -7569,19 +7574,19 @@ window.DASHBOARD_DATA = {
     "by_account": [
       {
         "account": "faye",
-        "sent": 8513
+        "sent": 8557
       },
       {
         "account": "iris",
-        "sent": 1382
+        "sent": 1413
       },
       {
         "account": "kate",
-        "sent": 643
+        "sent": 646
       },
       {
         "account": "melody",
-        "sent": 493
+        "sent": 495
       }
     ],
     "daily_by_account": [
@@ -9518,17 +9523,42 @@ window.DASHBOARD_DATA = {
       {
         "date": "2026-06-02",
         "account": "faye",
-        "sent": 20
+        "sent": 48
       },
       {
         "date": "2026-06-02",
         "account": "iris",
-        "sent": 8
+        "sent": 37
       },
       {
         "date": "2026-06-02",
         "account": "kate",
         "sent": 10
+      },
+      {
+        "date": "2026-06-02",
+        "account": "melody",
+        "sent": 1
+      },
+      {
+        "date": "2026-06-03",
+        "account": "faye",
+        "sent": 16
+      },
+      {
+        "date": "2026-06-03",
+        "account": "iris",
+        "sent": 2
+      },
+      {
+        "date": "2026-06-03",
+        "account": "kate",
+        "sent": 3
+      },
+      {
+        "date": "2026-06-03",
+        "account": "melody",
+        "sent": 1
       }
     ]
   },
@@ -12059,6 +12089,9 @@ window.DASHBOARD_DATA = {
 
   <div class="page" id="page-cs" style="display:none">
     <section>
+      <div class="alerts" id="csStaleBanner"></div>
+    </section>
+    <section>
       <div class="section-title">客服核心指标(邮箱)</div>
       <div class="kpis" id="csKpis"></div>
     </section>
@@ -12778,6 +12811,21 @@ function renderAlerts() {
 
 // ---------- 渲染:客服页 ----------
 function renderCS() {
+  // —— 数据滞后告警:客服 fastmail 数据最大日期 vs 看板 MAXD,差 >0 显著提示
+  const banner = document.getElementById("csStaleBanner");
+  if (banner) {
+    const csDates = (DATA.cs_rows || []).map(r => r.date).filter(Boolean).sort();
+    const csMax = csDates[csDates.length - 1];
+    if (!csMax) {
+      banner.innerHTML = `<div class="alert red"><span class="dot"></span><span class="tag">无数据</span><span>客服数据完全缺失,可能 cs-metrics 从未成功跑过。检查 ~/ecom-dashboard/logs/refresh.log。</span></div>`;
+    } else if (csMax < MAXD) {
+      const lagDays = Math.round((Date.parse(MAXD + "T00:00:00Z") - Date.parse(csMax + "T00:00:00Z")) / 86400000);
+      const level = lagDays >= 2 ? "red" : "amber";
+      banner.innerHTML = `<div class="alert ${level}"><span class="dot"></span><span class="tag">数据滞后</span><span>客服数据最新到 <b>${csMax}</b>(比 Shopify 落后 <b>${lagDays} 天</b>)。原因多半是 cs-metrics 连接 fastmail 超时 —— 看 ~/ecom-dashboard/logs/refresh.log 末尾。所选时间范围 <b>${RANGE.label}</b>(${RANGE.start} ~ ${RANGE.end})里无客服数据时 KPI 会显示 0。</span></div>`;
+    } else {
+      banner.innerHTML = "";
+    }
+  }
   const rows = filterRows(DATA.cs_rows);
   const received = sum(rows, "emails_received"), replied = sum(rows, "emails_replied");
   const backlog = sum(rows, "backlog");
