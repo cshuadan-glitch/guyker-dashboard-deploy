@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-06-12 15:45。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-06-12 15:54。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6363,48 +6363,70 @@ window.DASHBOARD_DATA = {
   },
   "targets": {
     "_note": "每月各渠道销售目标(USD)。改法:告诉 Claude 例如「6 月 Meta 改成 3 万」,我改文件。",
+    "_attribution_note": "用户给的渠道目标多为【平台自报口径】(Meta Ads Manager / Google Ads),加总会大于全店 Shopify 实收(多平台归因重叠)。看板进度按 Shopify last-click 估算,数值会显著低于目标 — 这是口径差异不是真落后。要测准平台自报需要拉 Meta conversion_value(待开发)。",
     "currency": "USD",
-    "as_of": "2026-06-03",
+    "as_of": "2026-06-04",
     "channels": [
       {
         "id": "total",
         "label": "全店总目标",
-        "source": "shopify_total"
+        "source": "shopify_total",
+        "hint": "Shopify 实收"
       },
       {
         "id": "meta",
         "label": "Meta 广告 / 社媒",
-        "source": "shopify_social"
+        "source": "shopify_social",
+        "hint": "目标=Meta 自报口径;看板=Shopify last-click(会偏低)"
       },
       {
         "id": "google",
         "label": "Google 广告 / 搜索",
-        "source": "ga4_paid_google"
+        "source": "ga4_paid_google",
+        "hint": "目标=Google 自报;看板=GA4 paid 估算"
       },
       {
         "id": "organic_brand",
-        "label": "自然 + 品牌",
-        "source": "shopify_direct_search_email"
+        "label": "自然 + 品牌(含 EDM)",
+        "source": "shopify_direct_search_email",
+        "hint": "EDM + 自然流量 + 品牌词搜索 + 直接访问"
       },
       {
         "id": "organic_social",
         "label": "自然社媒",
-        "source": "ga4_organic_social"
+        "source": "ga4_organic_social",
+        "hint": "GA4 Organic Social 占比 × 实收"
       },
       {
         "id": "affiliate",
         "label": "联盟营销",
-        "source": "ga4_referral"
+        "source": "ga4_referral",
+        "hint": "GA4 Referral 占比 × 实收"
       }
     ],
     "months": {
       "2026-06": {
-        "total": null,
-        "meta": null,
-        "google": null,
-        "organic_brand": null,
-        "organic_social": null,
-        "affiliate": null
+        "total": 160000,
+        "meta": 106900,
+        "google": 62000,
+        "organic_brand": 45000,
+        "organic_social": 20000,
+        "affiliate": 20000,
+        "_ad_spend_target": {
+          "meta": 31000,
+          "google": 17000,
+          "total": 48000,
+          "spend_ratio": 0.3
+        },
+        "_target_roas": {
+          "meta": 3.45,
+          "google": 3.6
+        },
+        "_breakdown_note": {
+          "edm_campaigns": 20000,
+          "edm_automation": 13000,
+          "organic_traffic": 12000
+        }
       }
     }
   },
@@ -14109,6 +14131,12 @@ function renderTargetProgress() {
     return;
   }
 
+  // —— 归因口径告警:当渠道目标加总 > 全店目标 1.3 倍,说明用户给的是平台自报口径 ——
+  const totalT = +monthTargets.total || 0;
+  const channelSum = channels.filter(c => c.id !== "total")
+    .reduce((a, c) => a + (+monthTargets[c.id] || 0), 0);
+  const isAttributionMixed = totalT > 0 && channelSum > totalT * 1.3;
+
   // —— 算当月实收 by 渠道 ——
   const monthPrefix = monthKey + "-";
   const monthRows = DATA.rows.filter(r => r.store === "guyker" && r.date.startsWith(monthPrefix));
@@ -14153,12 +14181,50 @@ function renderTargetProgress() {
     }
   };
 
-  // —— 渲染每条进度 ——
-  root.innerHTML = channels.map(c => {
+  // —— 广告花费目标(从 _ad_spend_target 读)——
+  const spendT = monthTargets._ad_spend_target || {};
+  const monthMetaSpend = monthRows.reduce((a, r) => a + (+r.meta_spend || 0), 0);
+  const monthGadsSpend = monthRows.reduce((a, r) => a + (+r.gads_spend || 0), 0);
+  const monthTotalSpend = monthMetaSpend + monthGadsSpend;
+  const spendRows = [];
+  if (spendT.meta)   spendRows.push({label: "Meta 广告花费",   actual: monthMetaSpend,  target: spendT.meta,   spend: true});
+  if (spendT.google) spendRows.push({label: "Google 广告花费", actual: monthGadsSpend,  target: spendT.google, spend: true});
+  if (spendT.total)  spendRows.push({label: "总广告花费",       actual: monthTotalSpend, target: spendT.total,  spend: true, divider: true});
+
+  const renderRow = (label, hint, actual, target, isSpend) => {
+    const pct = target > 0 ? actual / target : 0;
+    const expectedPct = pacing;
+    // 销售目标:超进度=绿;广告花费:超进度=红(花太快)
+    let color = "good";
+    if (isSpend) {
+      if (pct > expectedPct + 0.1) color = "bad";
+      else if (pct > expectedPct) color = "warn";
+    } else {
+      if (pct < expectedPct - 0.1) color = "bad";
+      else if (pct < expectedPct) color = "warn";
+    }
+    const fillWidth = Math.min(100, pct * 100);
+    const paceLeft = Math.min(100, expectedPct * 100);
+    const targetStr = target >= 1000 ? `$${(target/1000).toFixed(0)}k` : `$${target.toLocaleString("en-US")}`;
+    return `<div class="tgt-row">
+      <div class="tgt-label">${label}${hint ? `<span class="tgt-source">${hint}</span>` : ''}</div>
+      <div class="tgt-bar">
+        <div class="tgt-bar-fill ${color}" style="width:${fillWidth}%"></div>
+        <div class="tgt-bar-pace" style="left:${paceLeft}%" title="当月时间进度 ${(expectedPct*100).toFixed(0)}%"></div>
+      </div>
+      <div class="tgt-meta">
+        <div class="tgt-meta-1">$${Math.round(actual).toLocaleString("en-US")} / ${targetStr}</div>
+        <div class="tgt-meta-2">${isSpend ? "已花" : "完成"} <span class="tgt-pct ${color}">${(pct*100).toFixed(1)}%</span> · 当月走 ${(expectedPct*100).toFixed(0)}%</div>
+      </div>
+    </div>`;
+  };
+
+  // —— 渲染销售目标 ——
+  const salesHtml = channels.map(c => {
     const target = +monthTargets[c.id] || 0;
     if (target <= 0) {
       return `<div class="tgt-row">
-        <div class="tgt-label">${c.label}<span class="tgt-source">${c.source}</span></div>
+        <div class="tgt-label">${c.label}<span class="tgt-source">${c.hint || c.source}</span></div>
         <div class="tgt-bar"></div>
         <div class="tgt-meta">
           <div class="tgt-meta-1" style="color:var(--muted-2)">—</div>
@@ -14166,27 +14232,21 @@ function renderTargetProgress() {
         </div>
       </div>`;
     }
-    const actual = actualOf(c.source);
-    const pct = actual / target;
-    const expectedPct = pacing;
-    // 判定:实际进度 vs 期望进度
-    let status = "good", color = "good";
-    if (pct < expectedPct - 0.1) { status = "bad"; color = "bad"; }
-    else if (pct < expectedPct) { status = "warn"; color = "warn"; }
-    const fillWidth = Math.min(100, pct * 100);
-    const paceLeft = Math.min(100, expectedPct * 100);
-    return `<div class="tgt-row">
-      <div class="tgt-label">${c.label}<span class="tgt-source">目标 $${target.toLocaleString("en-US")}</span></div>
-      <div class="tgt-bar">
-        <div class="tgt-bar-fill ${color}" style="width:${fillWidth}%"></div>
-        <div class="tgt-bar-pace" style="left:${paceLeft}%" title="当月时间进度 ${(expectedPct*100).toFixed(0)}%"></div>
-      </div>
-      <div class="tgt-meta">
-        <div class="tgt-meta-1">$${Math.round(actual).toLocaleString("en-US")} / $${(target/1000).toFixed(0)}k</div>
-        <div class="tgt-meta-2">完成 <span class="tgt-pct ${color}">${(pct*100).toFixed(1)}%</span> · 当月走 ${(expectedPct*100).toFixed(0)}%</div>
-      </div>
-    </div>`;
+    return renderRow(c.label, c.hint, actualOf(c.source), target, false);
   }).join("");
+
+  // —— 归因告警 ——
+  const attributionWarn = isAttributionMixed
+    ? `<div class="alert amber" style="margin-bottom:10px"><span class="dot"></span><span class="tag">归因口径</span><span>渠道目标加总(\$${Math.round(channelSum).toLocaleString("en-US")})> 全店目标(\$${Math.round(totalT).toLocaleString("en-US")})× 1.3 = 平台自报口径(Meta/Google 自报 + EDM 等的 last-click)。看板进度按 <b>Shopify last-click</b> 估算,数字会偏低 30-60% — 这是<b>口径差异不是真落后</b>。要测准平台自报需要拉 Meta conversion_value(待开发)。</span></div>`
+    : "";
+
+  // —— 拼装最终 HTML ——
+  let html = attributionWarn + salesHtml;
+  if (spendRows.length) {
+    html += `<div class="section-title" style="margin-top:24px;font-size:11px;border:none;padding:0">广告花费目标</div>`;
+    html += spendRows.map(r => renderRow(r.label, r.divider ? "Meta + Google" : "", r.actual, r.target, true)).join("");
+  }
+  root.innerHTML = html;
 }
 
 function renderMonthly() {
