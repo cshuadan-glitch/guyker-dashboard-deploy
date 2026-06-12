@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-06-12 15:23。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-06-12 15:45。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -6361,6 +6361,53 @@ window.DASHBOARD_DATA = {
       }
     ]
   },
+  "targets": {
+    "_note": "每月各渠道销售目标(USD)。改法:告诉 Claude 例如「6 月 Meta 改成 3 万」,我改文件。",
+    "currency": "USD",
+    "as_of": "2026-06-03",
+    "channels": [
+      {
+        "id": "total",
+        "label": "全店总目标",
+        "source": "shopify_total"
+      },
+      {
+        "id": "meta",
+        "label": "Meta 广告 / 社媒",
+        "source": "shopify_social"
+      },
+      {
+        "id": "google",
+        "label": "Google 广告 / 搜索",
+        "source": "ga4_paid_google"
+      },
+      {
+        "id": "organic_brand",
+        "label": "自然 + 品牌",
+        "source": "shopify_direct_search_email"
+      },
+      {
+        "id": "organic_social",
+        "label": "自然社媒",
+        "source": "ga4_organic_social"
+      },
+      {
+        "id": "affiliate",
+        "label": "联盟营销",
+        "source": "ga4_referral"
+      }
+    ],
+    "months": {
+      "2026-06": {
+        "total": null,
+        "meta": null,
+        "google": null,
+        "organic_brand": null,
+        "organic_social": null,
+        "affiliate": null
+      }
+    }
+  },
   "voc": {
     "_note": "Guyker Reddit VOC 舆情快照,2026-05-26 经 duomeijin.aiforce.cloud(CodeX Reddit 汇总)页面抓取。实时更新需该平台导出/接口。",
     "source": "duomeijin.aiforce.cloud · CodeX Reddit 汇总",
@@ -12439,6 +12486,50 @@ window.DASHBOARD_DATA = {
     font-variant-numeric: tabular-nums;
   }
 
+  /* —— 月度目标进度条 —— */
+  #targetProgress { display: flex; flex-direction: column; gap: 10px; }
+  .tgt-row {
+    background: var(--card); border: 1px solid var(--line);
+    border-radius: var(--radius-sm); padding: 14px 18px;
+    box-shadow: var(--shadow-xs);
+    display: grid; grid-template-columns: 180px 1fr 200px; gap: 18px;
+    align-items: center;
+  }
+  .tgt-label { font-weight: 600; font-size: 13.5px; color: var(--ink); }
+  .tgt-label .tgt-source { display: block; font-size: 11px; color: var(--muted); font-weight: 500; margin-top: 2px; }
+  .tgt-bar {
+    height: 12px; background: var(--slate-50); border-radius: 999px; overflow: hidden;
+    position: relative; border: 1px solid var(--line);
+  }
+  .tgt-bar-fill {
+    height: 100%; border-radius: 999px;
+    transition: width .4s ease;
+    background: linear-gradient(90deg, var(--brand) 0%, #4a8af4 100%);
+  }
+  .tgt-bar-fill.good { background: linear-gradient(90deg, var(--green) 0%, #22c55e 100%); }
+  .tgt-bar-fill.warn { background: linear-gradient(90deg, var(--amber) 0%, #f59e0b 100%); }
+  .tgt-bar-fill.bad { background: linear-gradient(90deg, var(--red) 0%, #ef4444 100%); }
+  .tgt-bar-pace {
+    position: absolute; top: -3px; bottom: -3px; width: 2px;
+    background: var(--muted); border-radius: 1px;
+  }
+  .tgt-meta { display: flex; flex-direction: column; gap: 2px; text-align: right; }
+  .tgt-meta-1 { font-size: 14px; font-weight: 700; color: var(--ink); font-variant-numeric: tabular-nums; }
+  .tgt-meta-2 { font-size: 11px; color: var(--muted); }
+  .tgt-meta-2 .tgt-pct { font-weight: 700; }
+  .tgt-meta-2 .tgt-pct.good { color: var(--green); }
+  .tgt-meta-2 .tgt-pct.warn { color: var(--amber); }
+  .tgt-meta-2 .tgt-pct.bad  { color: var(--red); }
+  .tgt-empty {
+    background: var(--slate-50); border: 1px dashed #cbd5e1;
+    border-radius: var(--radius-sm); padding: 24px;
+    text-align: center; color: var(--muted); font-size: 13px;
+  }
+  @media (max-width: 760px) {
+    .tgt-row { grid-template-columns: 1fr; }
+    .tgt-meta { text-align: left; flex-direction: row; justify-content: space-between; }
+  }
+
   /* —— 响应式 —— */
   @media (max-width: 1100px) {
     .kpis { grid-template-columns: repeat(3, 1fr); }
@@ -12646,6 +12737,10 @@ window.DASHBOARD_DATA = {
     <section>
       <div class="section-title">月度经营汇总 · 真实(Shopify)<span id="monthlyAsOf" style="color:var(--muted);font-weight:400;font-size:12px;margin-left:6px"></span></div>
       <div class="alerts" id="monthlyBanner"></div>
+    </section>
+    <section>
+      <div class="section-title">本月目标进度 · <span id="targetMonth"></span></div>
+      <div id="targetProgress"></div>
     </section>
     <section>
       <div class="section-title">最近完整月 · 关键指标(对比上月)</div>
@@ -13995,7 +14090,107 @@ function renderChannelContribution() {
 }
 
 // ---------- 渲染:月度经营汇总(真实 Shopify)----------
+// ---------- 渲染:本月目标进度 ----------
+function renderTargetProgress() {
+  const T = DATA.targets || {};
+  const monthKey = MAXD.slice(0, 7);  // "2026-06"
+  document.getElementById("targetMonth").textContent = monthKey;
+  const root = document.getElementById("targetProgress");
+  if (!root) return;
+  const monthTargets = (T.months || {})[monthKey] || {};
+  const channels = T.channels || [];
+  // 检查是否有任何目标已填
+  const hasAny = channels.some(c => monthTargets[c.id] != null && monthTargets[c.id] > 0);
+  if (!hasAny) {
+    root.innerHTML = `<div class="tgt-empty">
+      尚未为 <b>${monthKey}</b> 设定目标。<br>
+      告诉 Claude:"6 月 Meta 目标 3 万,Google 1.8 万 …",我立刻填进 <code>data/targets.json</code>。
+    </div>`;
+    return;
+  }
+
+  // —— 算当月实收 by 渠道 ——
+  const monthPrefix = monthKey + "-";
+  const monthRows = DATA.rows.filter(r => r.store === "guyker" && r.date.startsWith(monthPrefix));
+  const actualTotal = monthRows.reduce((a, r) => a + (+r.net_sales || 0), 0);
+
+  // pacing:当月已走天数 / 当月总天数
+  const today = MAXD;  // 看板最新一天 = MDT 昨天
+  const [y, m] = monthKey.split("-").map(Number);
+  const daysInMonth = new Date(Date.UTC(y, m, 0)).getUTCDate();
+  const daysElapsed = parseInt(today.slice(-2), 10);   // MAXD 的日号
+  const pacing = Math.min(1, daysElapsed / daysInMonth);
+
+  // 渠道占比来自 GA4 channels_corrected;用近 30 天比例 × 当月实收 估算各渠道当月实收
+  const G = DATA.ga4 || {};
+  const ch = (G.channels_corrected || G.channels || []);
+  const gaRevTotal = ch.reduce((a, c) => a + (c.ga_revenue || 0), 0) || 1;
+  const gaShare = name => {
+    const c = ch.find(x => x.channel === name);
+    return c ? (c.ga_revenue || 0) / gaRevTotal : 0;
+  };
+  const sumGaShare = names => names.reduce((a, n) => a + gaShare(n), 0);
+  // Shopify traffic.sources(30 天)用于 social/direct/search/email 口径
+  const tsoc = ((DATA.monthly || {}).traffic || {}).sources || [];
+  const shop30Total = tsoc.reduce((a, s) => a + (s.net_sales || 0), 0) || 1;
+  const shopShare = source => {
+    const s = tsoc.find(x => x.source === source);
+    return s ? (s.net_sales || 0) / shop30Total : 0;
+  };
+
+  // 各 source 计算"当月实收估算":actualTotal × 该渠道近 30 天占比
+  const actualOf = (sourceKey) => {
+    switch (sourceKey) {
+      case "shopify_total":           return actualTotal;
+      case "shopify_social":          return actualTotal * shopShare("social");
+      case "shopify_direct_search_email":
+        return actualTotal * (shopShare("direct") + shopShare("search") + shopShare("email"));
+      case "ga4_paid_google":
+        return actualTotal * sumGaShare(["Paid Search", "Cross-network", "Paid Shopping", "Display", "Paid Video", "Paid Other"]);
+      case "ga4_organic_social":      return actualTotal * gaShare("Organic Social");
+      case "ga4_referral":            return actualTotal * gaShare("Referral");
+      default:                        return 0;
+    }
+  };
+
+  // —— 渲染每条进度 ——
+  root.innerHTML = channels.map(c => {
+    const target = +monthTargets[c.id] || 0;
+    if (target <= 0) {
+      return `<div class="tgt-row">
+        <div class="tgt-label">${c.label}<span class="tgt-source">${c.source}</span></div>
+        <div class="tgt-bar"></div>
+        <div class="tgt-meta">
+          <div class="tgt-meta-1" style="color:var(--muted-2)">—</div>
+          <div class="tgt-meta-2">本月未设目标</div>
+        </div>
+      </div>`;
+    }
+    const actual = actualOf(c.source);
+    const pct = actual / target;
+    const expectedPct = pacing;
+    // 判定:实际进度 vs 期望进度
+    let status = "good", color = "good";
+    if (pct < expectedPct - 0.1) { status = "bad"; color = "bad"; }
+    else if (pct < expectedPct) { status = "warn"; color = "warn"; }
+    const fillWidth = Math.min(100, pct * 100);
+    const paceLeft = Math.min(100, expectedPct * 100);
+    return `<div class="tgt-row">
+      <div class="tgt-label">${c.label}<span class="tgt-source">目标 $${target.toLocaleString("en-US")}</span></div>
+      <div class="tgt-bar">
+        <div class="tgt-bar-fill ${color}" style="width:${fillWidth}%"></div>
+        <div class="tgt-bar-pace" style="left:${paceLeft}%" title="当月时间进度 ${(expectedPct*100).toFixed(0)}%"></div>
+      </div>
+      <div class="tgt-meta">
+        <div class="tgt-meta-1">$${Math.round(actual).toLocaleString("en-US")} / $${(target/1000).toFixed(0)}k</div>
+        <div class="tgt-meta-2">完成 <span class="tgt-pct ${color}">${(pct*100).toFixed(1)}%</span> · 当月走 ${(expectedPct*100).toFixed(0)}%</div>
+      </div>
+    </div>`;
+  }).join("");
+}
+
 function renderMonthly() {
+  renderTargetProgress();
   const M = DATA.monthly || {};
   const months = M.months || [];
   document.getElementById("monthlyAsOf").textContent = M.as_of ? "· 截至 " + M.as_of : "";
