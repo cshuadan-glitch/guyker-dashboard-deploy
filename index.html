@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-06-15 15:49。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-06-16 15:07。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -4557,8 +4557,8 @@ window.DASHBOARD_DATA = {
     }
   ],
   "products": {
-    "_note": "Guyker 产品维度真实数据(截至 2026-06-14,Shopify ShopifyQL + Admin GraphQL)。热卖按 net_sales 排;低库存=当前 inventoryQuantity 0–阈值、追踪中、ACTIVE。",
-    "as_of": "2026-06-14",
+    "_note": "Guyker 产品维度真实数据(截至 2026-06-15,Shopify ShopifyQL + Admin GraphQL)。热卖按 net_sales 排;低库存=当前 inventoryQuantity 0–阈值、追踪中、ACTIVE。",
+    "as_of": "2026-06-15",
     "low_stock_threshold": 15,
     "top": {
       "1": [],
@@ -4568,8 +4568,8 @@ window.DASHBOARD_DATA = {
     "low_stock": []
   },
   "insights": {
-    "_note": "Guyker 经营洞察(近30天,截至 2026-06-14)。地区 + 客户/复购按天 = ShopifyQL 实时拉(2026-06-02 改);履约按天(shipped/delivered)仍沿用旧 MCP 快照 —— ShopifyQL fulfillments 公开列不可用。",
-    "as_of": "2026-06-14",
+    "_note": "Guyker 经营洞察(近30天,截至 2026-06-15)。地区 + 客户/复购按天 = ShopifyQL 实时拉(2026-06-02 改);履约按天(shipped/delivered)仍沿用旧 MCP 快照 —— ShopifyQL fulfillments 公开列不可用。",
+    "as_of": "2026-06-15",
     "summary": {
       "customers": 2494,
       "returning": 813,
@@ -5057,7 +5057,7 @@ window.DASHBOARD_DATA = {
   },
   "fulfillment": {
     "_note": "无订单数据",
-    "as_of": "2026-06-14",
+    "as_of": "2026-06-15",
     "window_days": 30,
     "summary": {},
     "by_day": [],
@@ -9553,7 +9553,7 @@ window.DASHBOARD_DATA = {
   },
   "issues": {
     "_note": "跨渠道产品问题聚合 — 半自动从客服/差评/VOC 三源算 by_channel 计数;主题名 + note 模板手工沉淀(改 build_issues.py 的 THEMES 即可)。差评列指近期样本(12 条)里命中本主题关键字的条数,非全店累计差评。",
-    "as_of": "2026-06-15",
+    "as_of": "2026-06-16",
     "channels": [
       "差评",
       "VOC",
@@ -9908,413 +9908,25 @@ window.DASHBOARD_DATA = {
   },
   "social_meta": {
     "_note": "Guyker Meta 自然内容(Graph API,只读)。长期 user token 自动续期(fb_exchange_token),无人值守每天可跑。daily 数组截至 Shopify-MDT 昨天(AS_OF),与 ops 口径一致。FB 发帖端点需 App Review,daily.posts 都是 0。",
-    "captured_at": "2026-06-15T15:00:38+08:00",
+    "captured_at": "2026-06-16T15:00:17+08:00",
     "window_days": 30,
     "facebook": {
       "page_id": "152598001273443",
       "status": {
-        "profile": "ok",
-        "insights": "ok",
-        "posts": "denied: (#10) This endpoint requires the 'pages_read_engagement' permission or the 'Page Public Content Access' feature. Refer to https://developers.facebook.com/docs/apps/review/login-permissions#manage-pages and https://developers.facebook.com/docs/apps/review/feature#reference-PAGES_ACCESS for details. (code 10/None)"
-      },
-      "name": "Guyker",
-      "fans": 48124,
-      "followers": 48124,
-      "daily": [
-        {
-          "date": "2026-05-18",
-          "reach": 89209,
-          "engagements": 4994,
-          "new_follows": 39,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-19",
-          "reach": 84811,
-          "engagements": 4979,
-          "new_follows": 34,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-20",
-          "reach": 89257,
-          "engagements": 5370,
-          "new_follows": 30,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-21",
-          "reach": 89397,
-          "engagements": 5585,
-          "new_follows": 39,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-22",
-          "reach": 101807,
-          "engagements": 5968,
-          "new_follows": 46,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-23",
-          "reach": 109223,
-          "engagements": 5169,
-          "new_follows": 38,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-24",
-          "reach": 103101,
-          "engagements": 5069,
-          "new_follows": 28,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-25",
-          "reach": 85749,
-          "engagements": 4624,
-          "new_follows": 39,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-26",
-          "reach": 95518,
-          "engagements": 5055,
-          "new_follows": 32,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-27",
-          "reach": 98530,
-          "engagements": 5165,
-          "new_follows": 39,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-28",
-          "reach": 134084,
-          "engagements": 6774,
-          "new_follows": 147,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-29",
-          "reach": 114084,
-          "engagements": 5329,
-          "new_follows": 70,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-30",
-          "reach": 88131,
-          "engagements": 5732,
-          "new_follows": 39,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-31",
-          "reach": 97391,
-          "engagements": 6211,
-          "new_follows": 50,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-01",
-          "reach": 88708,
-          "engagements": 5249,
-          "new_follows": 34,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-02",
-          "reach": 98835,
-          "engagements": 4909,
-          "new_follows": 38,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-03",
-          "reach": 82584,
-          "engagements": 4088,
-          "new_follows": 54,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-04",
-          "reach": 83870,
-          "engagements": 4559,
-          "new_follows": 37,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-05",
-          "reach": 119064,
-          "engagements": 6067,
-          "new_follows": 101,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-06",
-          "reach": 141493,
-          "engagements": 6757,
-          "new_follows": 254,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-07",
-          "reach": 110384,
-          "engagements": 5120,
-          "new_follows": 99,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-08",
-          "reach": 108580,
-          "engagements": 5417,
-          "new_follows": 90,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-09",
-          "reach": 86199,
-          "engagements": 4542,
-          "new_follows": 55,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-10",
-          "reach": 88311,
-          "engagements": 4798,
-          "new_follows": 72,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-11",
-          "reach": 89086,
-          "engagements": 5213,
-          "new_follows": 42,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-12",
-          "reach": 114305,
-          "engagements": 6312,
-          "new_follows": 75,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-13",
-          "reach": 106065,
-          "engagements": 5388,
-          "new_follows": 74,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-14",
-          "reach": 113654,
-          "engagements": 5764,
-          "new_follows": 102,
-          "posts": 0
-        }
-      ],
-      "reach_30d": 2811430,
-      "engagements_30d": 150207,
-      "new_follows_30d": 1797
+        "profile": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>",
+        "insights": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>",
+        "posts": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      }
     },
     "instagram": {
       "ig_id": "17841462889698921",
       "status": {
-        "profile": "ok",
-        "insights": "ok",
-        "media": "ok"
-      },
-      "username": "guykerofficial",
-      "followers": 56293,
-      "media_count": 1446,
-      "daily": [
-        {
-          "date": "2026-05-17",
-          "reach": 24382,
-          "new_follows": 113,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-18",
-          "reach": 20514,
-          "new_follows": 84,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-19",
-          "reach": 31474,
-          "new_follows": 102,
-          "posts": 3
-        },
-        {
-          "date": "2026-05-20",
-          "reach": 43928,
-          "new_follows": 246,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-21",
-          "reach": 37014,
-          "new_follows": 150,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-22",
-          "reach": 33626,
-          "new_follows": 170,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-23",
-          "reach": 36739,
-          "new_follows": 166,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-24",
-          "reach": 33713,
-          "new_follows": 137,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-25",
-          "reach": 29671,
-          "new_follows": 114,
-          "posts": 0
-        },
-        {
-          "date": "2026-05-26",
-          "reach": 42183,
-          "new_follows": 87,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-27",
-          "reach": 38716,
-          "new_follows": 114,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-28",
-          "reach": 37674,
-          "new_follows": 79,
-          "posts": 2
-        },
-        {
-          "date": "2026-05-29",
-          "reach": 26007,
-          "new_follows": 80,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-30",
-          "reach": 32116,
-          "new_follows": 94,
-          "posts": 1
-        },
-        {
-          "date": "2026-05-31",
-          "reach": 26238,
-          "new_follows": 80,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-01",
-          "reach": 27824,
-          "new_follows": 99,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-02",
-          "reach": 26853,
-          "new_follows": 277,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-03",
-          "reach": 37129,
-          "new_follows": 210,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-04",
-          "reach": 67292,
-          "new_follows": 192,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-05",
-          "reach": 35100,
-          "new_follows": 132,
-          "posts": 3
-        },
-        {
-          "date": "2026-06-06",
-          "reach": 28776,
-          "new_follows": 115,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-07",
-          "reach": 37436,
-          "new_follows": 146,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-08",
-          "reach": 29912,
-          "new_follows": 141,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-09",
-          "reach": 31470,
-          "new_follows": 156,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-10",
-          "reach": 34017,
-          "new_follows": 151,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-11",
-          "reach": 33467,
-          "new_follows": 151,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-12",
-          "reach": 41367,
-          "new_follows": 134,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-13",
-          "reach": 34567,
-          "new_follows": 134,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-14",
-          "reach": 31077,
-          "new_follows": 0,
-          "posts": 1
-        }
-      ],
-      "reach_30d": 990282,
-      "new_follows_30d": 3854,
-      "media_30d": 32,
-      "media_likes_30d": 10704,
-      "media_comments_30d": 201
+        "profile": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>",
+        "insights": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>",
+        "media": "denied: <urlopen error [Errno 8] nodename nor servname provided, or not known>"
+      }
     },
-    "as_of": "2026-06-14"
+    "as_of": "2026-06-15"
   },
   "ga4": {
     "_note": "Guyker GA4 流量(近30天),从 Apps Script 写的 Google Sheet 读取。ga_revenue 仅交叉验证,不作成交口径(成交以 Shopify 为准)。",
