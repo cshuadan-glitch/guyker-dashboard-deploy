@@ -1,4 +1,4 @@
-<!-- 自包含单文件看板,自动生成于 2026-07-04 15:57。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
+<!-- 自包含单文件看板,自动生成于 2026-07-05 15:05。勿手改;改 dashboard/index.html 后重跑 scripts/build_standalone.py。 -->
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
@@ -4947,8 +4947,8 @@ window.DASHBOARD_DATA = {
     }
   ],
   "products": {
-    "_note": "Guyker 产品维度真实数据(截至 2026-07-03,Shopify ShopifyQL + Admin GraphQL)。热卖按 net_sales 排;低库存=当前 inventoryQuantity 0–阈值、追踪中、ACTIVE。",
-    "as_of": "2026-07-03",
+    "_note": "Guyker 产品维度真实数据(截至 2026-07-04,Shopify ShopifyQL + Admin GraphQL)。热卖按 net_sales 排;低库存=当前 inventoryQuantity 0–阈值、追踪中、ACTIVE。",
+    "as_of": "2026-07-04",
     "low_stock_threshold": 15,
     "top": {
       "1": [],
@@ -4958,8 +4958,8 @@ window.DASHBOARD_DATA = {
     "low_stock": []
   },
   "insights": {
-    "_note": "Guyker 经营洞察(近30天,截至 2026-07-03)。地区 + 客户/复购按天 = ShopifyQL 实时拉(2026-06-02 改);履约按天(shipped/delivered)仍沿用旧 MCP 快照 —— ShopifyQL fulfillments 公开列不可用。",
-    "as_of": "2026-07-03",
+    "_note": "Guyker 经营洞察(近30天,截至 2026-07-04)。地区 + 客户/复购按天 = ShopifyQL 实时拉(2026-06-02 改);履约按天(shipped/delivered)仍沿用旧 MCP 快照 —— ShopifyQL fulfillments 公开列不可用。",
+    "as_of": "2026-07-04",
     "summary": {
       "customers": 2412,
       "returning": 782,
@@ -5447,7 +5447,7 @@ window.DASHBOARD_DATA = {
   },
   "fulfillment": {
     "_note": "无订单数据",
-    "as_of": "2026-07-03",
+    "as_of": "2026-07-04",
     "window_days": 30,
     "summary": {},
     "by_day": [],
@@ -10318,7 +10318,7 @@ window.DASHBOARD_DATA = {
   },
   "issues": {
     "_note": "跨渠道产品问题聚合 — 半自动从客服/差评/VOC 三源算 by_channel 计数;主题名 + note 模板手工沉淀(改 build_issues.py 的 THEMES 即可)。差评列指近期样本(12 条)里命中本主题关键字的条数,非全店累计差评。",
-    "as_of": "2026-07-04",
+    "as_of": "2026-07-05",
     "channels": [
       "差评",
       "VOC",
@@ -10673,212 +10673,25 @@ window.DASHBOARD_DATA = {
   },
   "social_meta": {
     "_note": "Guyker Meta 自然内容(Graph API,只读)。长期 user token 自动续期(fb_exchange_token),无人值守每天可跑。daily 数组截至 Shopify-MDT 昨天(AS_OF),与 ops 口径一致。FB 发帖端点需 App Review,daily.posts 都是 0。",
-    "captured_at": "2026-07-04T15:00:44+08:00",
+    "captured_at": "2026-07-05T15:00:11+08:00",
     "window_days": 30,
     "facebook": {
       "page_id": "152598001273443",
       "status": {
-        "profile": "ok",
-        "insights": "denied: (#100) The value must be a valid insights metric (code 100/None)",
-        "posts": "denied: (#10) This endpoint requires the 'pages_read_engagement' permission or the 'Page Public Content Access' feature. Refer to https://developers.facebook.com/docs/apps/review/login-permissions#manage-pages and https://developers.facebook.com/docs/apps/review/feature#reference-PAGES_ACCESS for details. (code 10/None)"
-      },
-      "name": "Guyker",
-      "fans": 49209,
-      "followers": 49209
+        "profile": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+        "insights": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+        "posts": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>"
+      }
     },
     "instagram": {
       "ig_id": "17841462889698921",
       "status": {
-        "profile": "ok",
-        "insights": "ok",
-        "media": "ok"
-      },
-      "username": "guykerofficial",
-      "followers": 57999,
-      "media_count": 1480,
-      "daily": [
-        {
-          "date": "2026-06-05",
-          "reach": 35100,
-          "new_follows": 132,
-          "posts": 3
-        },
-        {
-          "date": "2026-06-06",
-          "reach": 28776,
-          "new_follows": 115,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-07",
-          "reach": 37436,
-          "new_follows": 146,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-08",
-          "reach": 29912,
-          "new_follows": 141,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-09",
-          "reach": 31470,
-          "new_follows": 156,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-10",
-          "reach": 34017,
-          "new_follows": 151,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-11",
-          "reach": 33467,
-          "new_follows": 151,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-12",
-          "reach": 41367,
-          "new_follows": 134,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-13",
-          "reach": 34567,
-          "new_follows": 134,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-14",
-          "reach": 31312,
-          "new_follows": 162,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-15",
-          "reach": 28170,
-          "new_follows": 111,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-16",
-          "reach": 31127,
-          "new_follows": 118,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-17",
-          "reach": 26788,
-          "new_follows": 98,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-18",
-          "reach": 31237,
-          "new_follows": 99,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-19",
-          "reach": 24365,
-          "new_follows": 98,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-20",
-          "reach": 28781,
-          "new_follows": 103,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-21",
-          "reach": 28003,
-          "new_follows": 128,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-22",
-          "reach": 21692,
-          "new_follows": 117,
-          "posts": 0
-        },
-        {
-          "date": "2026-06-23",
-          "reach": 22661,
-          "new_follows": 97,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-24",
-          "reach": 25849,
-          "new_follows": 108,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-25",
-          "reach": 22890,
-          "new_follows": 111,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-26",
-          "reach": 27159,
-          "new_follows": 132,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-27",
-          "reach": 26513,
-          "new_follows": 113,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-28",
-          "reach": 31831,
-          "new_follows": 174,
-          "posts": 2
-        },
-        {
-          "date": "2026-06-29",
-          "reach": 22617,
-          "new_follows": 109,
-          "posts": 1
-        },
-        {
-          "date": "2026-06-30",
-          "reach": 26418,
-          "new_follows": 118,
-          "posts": 0
-        },
-        {
-          "date": "2026-07-01",
-          "reach": 29382,
-          "new_follows": 148,
-          "posts": 3
-        },
-        {
-          "date": "2026-07-02",
-          "reach": 31058,
-          "new_follows": 143,
-          "posts": 2
-        },
-        {
-          "date": "2026-07-03",
-          "reach": 25709,
-          "new_follows": 0,
-          "posts": 1
-        }
-      ],
-      "reach_30d": 849674,
-      "new_follows_30d": 3547,
-      "media_30d": 37,
-      "media_likes_30d": 6649,
-      "media_comments_30d": 142
+        "profile": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+        "insights": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>",
+        "media": "denied: <urlopen error EOF occurred in violation of protocol (_ssl.c:1129)>"
+      }
     },
-    "as_of": "2026-07-03"
+    "as_of": "2026-07-04"
   },
   "ga4": {
     "_note": "Guyker GA4 流量(近30天),从 Apps Script 写的 Google Sheet 读取。ga_revenue 仅交叉验证,不作成交口径(成交以 Shopify 为准)。",
